@@ -1,0 +1,26 @@
+name: CI Sandbox
+
+# 1. The Trigger: Run this every time you push to the repository
+on: [push]
+
+# 2. The Infrastructure: What VMs do we want?
+jobs:
+  explore-ubuntu:
+    runs-on: ubuntu-latest
+    
+    # 3. The Execution: What commands do we run?
+    steps:
+      - name: Abstracted Setup (Get the code)
+        uses: actions/checkout@v4
+
+      - name: Run raw Bash commands
+        run: |
+          echo "Hello from the GitHub Actions server!"
+          echo "Operating System: $(uname -a)"
+          echo "Who am I? $(whoami)"
+          
+      - name: Inspect the workspace
+        run: |
+          echo "I am currently in: $(pwd)"
+          echo "Here are the files GitHub just checked out:"
+          ls -la
