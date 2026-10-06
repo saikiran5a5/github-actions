@@ -1,0 +1,37 @@
+name: Dasara Sandbox
+
+# 1. The Trigger (When does this run?)
+on:
+  push:
+    branches: ["main"]
+
+# 2. The Execution (What servers are we booting up?)
+jobs:
+  job_one:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print OS info
+        run: uname -a
+
+      - name: Create a dummy artifact
+        run: echo "This is a fake mint binary" > mint-binary.txt
+
+      - name: Upload to GitHub Storage
+        uses: actions/upload-artifact@v4
+        with:
+          name: sandbox-artifact
+          path: mint-binary.txt
+
+  job_two:
+    needs: job_one  # Forces job_two to wait for job_one to finish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download from GitHub Storage
+        uses: actions/download-artifact@v4
+        with:
+          name: sandbox-artifact
+
+      - name: Verify the artifact survived
+        run: |
+          ls -la
+          cat mint-binary.txt
