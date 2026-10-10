@@ -1,14 +1,10 @@
-
-import os, sys, json
-from pathlib import Path
-import math
-
-
 DEBUG=True
 unused_variable = "I am not used"
 
 
-def calculate_average(numbers=[]):
+def calculate_average(numbers=None):
+    if numbers is None:
+        numbers = []
     total=0
     for n in numbers:
         total+=n
@@ -36,9 +32,8 @@ class dataProcessor:
 
 
 def read_file(filename):
-    f = open(filename, "r")
-    content = f.read()
-    f.close()
+    with open(filename, "r") as f:
+        content = f.read()
     return content
 
 
@@ -55,9 +50,9 @@ def main():
         print("Ten")
 
     try:
-        value = int("not a number")
-    except:
-        pass
+        int("not a number")
+    except ValueError as e:
+        print(e)
 
     print("Done")
 
