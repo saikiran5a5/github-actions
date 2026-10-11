@@ -28,5 +28,8 @@ jobs:
         with:
           name: dragon-text-file
 
+      - name: View file
+        run: cat cowsaid.txt
+
       - name: grep from file
         run: grep "Jai Babu!" cowsaid.txt
