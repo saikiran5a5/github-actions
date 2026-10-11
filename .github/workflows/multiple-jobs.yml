@@ -9,12 +9,24 @@ jobs:
     steps:
       - name: Install cowsay
         run: sudo apt-get install cowsay -y
+
       - name: Run cowsay
         run: cowsay -f dragon "Jai Babu!" > cowsaid.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: dragon-text-file
+          path: ./cowsaid.txt
 
   second_job:
     needs: first_job
     runs-on: ubuntu-latest
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: dragon-text-file
+
       - name: grep from file
         run: grep "Jai Babu!" cowsaid.txt
