@@ -1,0 +1,19 @@
+name: Multiple jobs test
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  first_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install cowsay
+        run: sudo apt-get install cowsay -y
+      - name: Run cowsay
+        run: cowsay -f dragon "Jai Babu!" > cowsaid.txt
+
+  second_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: grep from file
+        run: grep "Jai Babu!" cowsaid.txt
