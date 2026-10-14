@@ -1,0 +1,22 @@
+name: Manually triggered workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  single-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup python
+        uses: actions/setup-python@v7
+        with:
+          python-version: 3.12
+
+      - name: Run the script
+        run: python main.py
