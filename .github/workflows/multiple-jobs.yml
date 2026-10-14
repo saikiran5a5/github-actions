@@ -1,7 +1,8 @@
 name: Multiple jobs test
 on:
-  push:
-    branches: ["main"]
+  # push:
+  #   branches: ["main"]
+  workflow_dispatch:
 
 jobs:
   first_job:

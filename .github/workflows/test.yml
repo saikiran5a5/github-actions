@@ -2,8 +2,9 @@ name: Dasara Sandbox
 
 # 1. The Trigger (When does this run?)
 on:
-  push:
-    branches: ["main"]
+  # push:
+  #   branches: ["main"]
+  workflow_dispatch:
 
 # 2. The Execution (What servers are we booting up?)
 jobs:
