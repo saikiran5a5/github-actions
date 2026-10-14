@@ -1,7 +1,8 @@
 name: CI Sandbox
 
 # 1. The Trigger: Run this every time you push to the repository
-on: [push]
+on:
+  workflow_dispatch:
 
 # 2. The Infrastructure: What VMs do we want?
 jobs:

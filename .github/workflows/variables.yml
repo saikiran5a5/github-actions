@@ -1,8 +1,9 @@
 name: variables & secrets test
 
 on:
-  push:
-    branches: ["main"]
+  # push:
+  #   branches: ["main"]
+  workflow_dispatch:
 
 jobs:
   docker_build:
