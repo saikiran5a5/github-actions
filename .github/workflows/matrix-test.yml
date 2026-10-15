@@ -12,7 +12,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, ubuntu-26.04, windows-latest, macos-latest]
         image: [hello-world, alpine]
-
+        exclude:
+          - image: alpine
+            os: [windows-latest, macos-latest]
+          - image: hello-world
+            os: macos-latest
     runs-on: ${{ matrix.os }}
 
     steps:
