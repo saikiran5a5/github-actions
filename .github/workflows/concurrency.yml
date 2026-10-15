@@ -1,0 +1,26 @@
+name: Concurrency test
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  docker-login:
+    name: Login to docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker login
+        run: echo "echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ github.repository_owner }} --password --stdin"
+
+  docker-build:
+    needs: docker-login
+    concurrency:
+      group: production-environment
+      cancel-in-progress: true
+    name: Build docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker build
+        run: |
+          echo "docker build -t ${{ github.repository_owner }}/production:latest ."
+          sleep 3600
