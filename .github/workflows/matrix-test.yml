@@ -8,6 +8,7 @@ jobs:
   docker-run:
     name: Docker run
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, ubuntu-26.04, windows-latest, macos-latest]
         image: [hello-world, alpine]
