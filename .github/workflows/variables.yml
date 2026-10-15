@@ -17,5 +17,5 @@ jobs:
     name: Push to docker hub
     runs-on: ubuntu-latest
     steps:
-      - run: echo "docker tag staging-image:latest ${{ vars.DOCKER_USERNAME }}/staging-image:latest"
+      - run: echo "docker tag staging-image:latest ${{ github.repository_owner }}/staging-image:latest"
       - run: echo "echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username $GITHUB_ACTOR --password-stdin"
