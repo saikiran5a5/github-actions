@@ -14,7 +14,9 @@ jobs:
         image: [hello-world, alpine]
         exclude:
           - image: alpine
-            os: [windows-latest, macos-latest]
+            os: windows-latest
+          - image: alpine
+            os: macos-latest
           - image: hello-world
             os: macos-latest
     runs-on: ${{ matrix.os }}
