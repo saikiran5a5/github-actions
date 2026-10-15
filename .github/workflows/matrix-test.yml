@@ -1,0 +1,17 @@
+name: Matrix test workflow
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  docker-run:
+    name: Docker run
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-26.04, windows-latest, macos-latest]
+        image: [hello-world, alpine]
+
+    steps:
+      - name: Run docker image
+        run: docker run ${{ matrix.image }}
