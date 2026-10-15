@@ -12,6 +12,8 @@ jobs:
         os: [ubuntu-latest, ubuntu-26.04, windows-latest, macos-latest]
         image: [hello-world, alpine]
 
+    runs-on: ${{ matrix.os }}
+
     steps:
       - name: Run docker image
         run: docker run ${{ matrix.image }}
