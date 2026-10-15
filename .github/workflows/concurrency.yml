@@ -1,8 +1,7 @@
 name: Concurrency test
 
 on:
-  push:
-    branches: ["main"]
+  workflow_dispatch:
 
 jobs:
   docker-login:
