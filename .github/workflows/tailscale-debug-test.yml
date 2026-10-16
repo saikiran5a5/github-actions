@@ -1,0 +1,28 @@
+name: Interactive debug runner
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }} # <-- I idiotically dropped this line
+          tags: tag:ci-debug
+          args: --ssh
+
+      - name: Show connection details and wait
+        run: |
+          echo "Runner Tailscale IPv4:"
+          tailscale ip -4
+          echo "Runner is available for 15 minutes."
+          sleep 900
