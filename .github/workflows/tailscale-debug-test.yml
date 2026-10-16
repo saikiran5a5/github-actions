@@ -16,10 +16,9 @@ jobs:
         uses: tailscale/github-action@v4
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }} # <-- I idiotically dropped this line
+          audience: ${{ secrets.TS_AUDIENCE }}
           tags: tag:ci-debug
           args: --ssh
-
       - name: Show connection details and wait
         run: |
           echo "Runner Tailscale IPv4:"
