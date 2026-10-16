@@ -31,12 +31,11 @@ jobs:
       - name: Stage for nuitka
         run: |
           uv venv
-          source .venv/bin/activate
           uv pip install nuitka
 
       - name: Build with nuitka
         run: |
-          python -m nuitka \
+          uv run python -m nuitka \
                   --standalone \
                   --onefile \
                   --lto=yes \
@@ -72,12 +71,11 @@ jobs:
       - name: Stage for nuitka
         run: |
           uv venv
-          source .venv/bin/activate
           uv pip install nuitka
 
       - name: Build with nuitka
         run: |
-          python -m nuitka \
+          uv run python -m nuitka \
                   --standalone \
                   --onefile \
                   --lto=yes \
@@ -113,12 +111,11 @@ jobs:
       - name: Stage for nuitka
         run: |
           uv venv
-          .venv/Scripts/activate
           uv pip install nuitka
 
       - name: Build with nuitka
         run: |
-          python -m nuitka \
+          uv run python -m nuitka \
                   --standalone \
                   --onefile \
                   --lto=yes \
