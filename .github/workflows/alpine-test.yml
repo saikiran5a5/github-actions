@@ -1,0 +1,82 @@
+name: Build and test on alpine
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build-alpine:
+    name: Build on alpine container (for musl binaries)
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm]
+
+    runs-on: ${{ matrix.os }}
+    container:
+      image: ghcr.io/saikiran5a5/github-actions/alpine-builder
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.14'
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884
+        with:
+          enable-cache: false
+
+      - name: Stage for nuitka
+        run: |
+          uv venv
+          uv pip install nuitka
+
+      - name: Build with nuitka
+        shell: bash
+        run: |
+          uv run python -m nuitka \
+                  --standalone \
+                  --onefile \
+                  --lto=yes \
+                  --enable-plugin=anti-bloat \
+                  --assume-yes-for-downloads \
+                  --remove-output \
+                  --output-filename=mint \
+                  main.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: mint-${{ matrix.os }}
+          path: ./mint*
+        
+
+  test-alpine:
+    needs: [build-alpine]
+    name: Test the build artifacts on matrix
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm]
+
+    runs-on: ${{ matrix.os }}
+    container:
+      image: ghcr.io/saikiran5a5/github-actions/alpine-builder
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: mint-${{ matrix.os }}
+
+      - name: Make executable
+        run: chmod +x ./mint*
+
+      - name: Test artifact
+        run: ./mint --help
