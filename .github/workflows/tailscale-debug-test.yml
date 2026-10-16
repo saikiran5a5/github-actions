@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   debug:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     timeout-minutes: 20
     steps:
       - name: Connect to Tailscale
