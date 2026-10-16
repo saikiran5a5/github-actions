@@ -2,15 +2,15 @@ name: Build and test on matrix
 on:
   push:
     branches: ["main"]
-  workflow_dispatch:
+    workflow_dispatch:
 
 jobs:
-  build-linux:
-    name: Build on linux (glibc)
+  build-matrix:
+    name: Build on matrix
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, ubuntu-24.04-arm]
+        os: [ubuntu-latest, ubuntu-24.04-arm, macos-latest, macos-15-intel, windows-latest, windows-11-arm]
 
     runs-on: ${{ matrix.os }}
 
@@ -27,6 +27,8 @@ jobs:
 
       - name: Setup uv
         uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884
+        with:
+          enable-cache: false
 
       - name: Stage for nuitka
         run: |
@@ -34,86 +36,7 @@ jobs:
           uv pip install nuitka
 
       - name: Build with nuitka
-        run: |
-          uv run python -m nuitka \
-                  --standalone \
-                  --onefile \
-                  --lto=yes \
-                  --enable-plugin=anti-bloat \
-                  --assume-yes-for-downloads \
-                  --remove-output \
-                  --output-filename=mint \
-                  main.py
-
-  build-macos:
-    name: Build on macOS
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [macos-latest, macos-15-intel]
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-
-      - name: Setup python
-        uses: actions/setup-python@v7
-        with:
-          python-version: '3.14'
-
-      - name: Setup uv
-        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884
-
-      - name: Stage for nuitka
-        run: |
-          uv venv
-          uv pip install nuitka
-
-      - name: Build with nuitka
-        run: |
-          uv run python -m nuitka \
-                  --standalone \
-                  --onefile \
-                  --lto=yes \
-                  --enable-plugin=anti-bloat \
-                  --assume-yes-for-downloads \
-                  --remove-output \
-                  --output-filename=mint \
-                  main.py
-
-  build-windows:
-    name: Build on Windows
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest, windows-11-arm]
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-
-      - name: Setup python
-        uses: actions/setup-python@v7
-        with:
-          python-version: '3.14'
-
-      - name: Setup uv
-        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884
-
-      - name: Stage for nuitka
-        run: |
-          uv venv
-          uv pip install nuitka
-
-      - name: Build with nuitka
+        shell: bash
         run: |
           uv run python -m nuitka \
                   --standalone \
