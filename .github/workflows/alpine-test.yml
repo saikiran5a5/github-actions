@@ -14,7 +14,7 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     container:
-      image: ghcr.io/saikiran5a5/github-actions/alpine-builder
+      image: ghcr.io/saikiran5a5/alpine-builder:latest
 
     steps:
       - name: Checkout repository
@@ -67,7 +67,7 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     container:
-      image: ghcr.io/saikiran5a5/github-actions/alpine-builder
+      image: ghcr.io/saikiran5a5/alpine-builder:latest
 
     steps:
       - name: Download artifact
