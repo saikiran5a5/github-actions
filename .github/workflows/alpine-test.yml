@@ -31,7 +31,6 @@ jobs:
                   --onefile \
                   --lto=yes \
                   --enable-plugin=anti-bloat \
-                  --include-data-dir=templates=templates \
                   --assume-yes-for-downloads \
                   --remove-output \
                   --output-filename=mint \
