@@ -13,8 +13,6 @@ jobs:
         os: [ubuntu-latest, ubuntu-24.04-arm]
 
     runs-on: ${{ matrix.os }}
-    container:
-      image: ghcr.io/saikiran5a5/alpine-builder:latest
 
     steps:
       - name: Checkout repository
@@ -22,33 +20,23 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Setup python
-        uses: actions/setup-python@v7
-        with:
-          python-version: '3.14'
-
-      - name: Setup uv
-        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884
-        with:
-          enable-cache: false
-
-      - name: Stage for nuitka
+      - name: Build on container
         run: |
-          uv venv
-          uv pip install nuitka
-
-      - name: Build with nuitka
-        shell: bash
-        run: |
-          uv run python -m nuitka \
+          docker run --rm \
+          -v .:/workspace -w /workspace \
+          ghcr.io/saikiran5a5/alpine-builder:latest \
+          sh -c "
+                  python -m nuitka \
                   --standalone \
                   --onefile \
                   --lto=yes \
                   --enable-plugin=anti-bloat \
+                  --include-data-dir=templates=templates \
                   --assume-yes-for-downloads \
                   --remove-output \
                   --output-filename=mint \
-                  main.py
+                  main.py 
+                "
 
       - name: Upload artifact
         uses: actions/upload-artifact@v7
@@ -66,8 +54,6 @@ jobs:
         os: [ubuntu-latest, ubuntu-24.04-arm]
 
     runs-on: ${{ matrix.os }}
-    container:
-      image: ghcr.io/saikiran5a5/alpine-builder:latest
 
     steps:
       - name: Download artifact
@@ -78,5 +64,9 @@ jobs:
       - name: Make executable
         run: chmod +x ./mint*
 
-      - name: Test artifact
-        run: ./mint --help
+      - name: Test on container
+        run: |
+          docker run --rm \
+          -v .:/workspace -w /workspace \
+          ghcr.io/saikiran5a5/alpine-builder:latest \
+          ./mint --help
